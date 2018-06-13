@@ -1,87 +1,7 @@
 #include "Header.h"
 
 
-////////////////////////////////////////////////////////
-FDEP::FDEP(): _l("A"),_r("B")
-{}
-
-
-void FDEP::setLeft(char * l)
-{
-	strcpy_s(_l,l); 
-}
-
-void FDEP::setRight(char * r) {
-	strcpy_s(_r,r); 
-}
-
-char * FDEP::getLeft()
-{
-	return _l;
-}
-
-char * FDEP::getRight()
-{
-	return _r;
-}
-
-bool  FDEP::operator==(FDEP & fdep)
-{
-	if (strcmp(this->_l, fdep._l) == 0 && strcmp(this->_r, fdep._r) == 0)
-		return true;
-	return false; 
-
-	// TODO: insert return statement here
-}
-
-FDEP & FDEP::operator=(FDEP & source)
-{
-	if (this != &source) {
-		strcpy(this->_l, source._l);
-		strcpy(this->_r, source._r);
-	}
-	return *this;
-}
-
-istream & operator>>(istream & is, FDEP & fdep)
-{
-	cout << "Enter the left side : ";
-	is >> fdep._l;
-	cout << "Enter the right side : ";
-	is >> fdep._r;
-	return is;
-}
-
-ostream & operator<<(ostream & os, FDEP & fdep)
-{
-	os << fdep._l << " -> " << fdep._r << endl;
-	return os;
-}
-
-//////////////////////////////////////////////////////////
-ostream & operator<<(ostream & os, RELATION & rlt)
-{
-	os << "( " << rlt._rel[0];
-	for (int i = 1; i < strlen(rlt._rel); i++) {
-		os << " , " << rlt._rel[i];
-	}
-	os << " )";
-	return os; 
-
-}
-
-istream & operator>>(istream & is, RELATION & rlt)
-{
-	cout << "Enter the relation : ";
-	is >> rlt._rel;
-	return is; 
-	// TODO: insert return statement here
-}
-
-
-
-
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 RELATION::RELATION():_rel(new char[10]),_nbElem(10)
 {}
 
@@ -111,6 +31,80 @@ int RELATION::getNbElem()
 {
 	return _nbElem;
 }
+
+ostream & operator<<(ostream & os, RELATION & rlt)
+{
+	os << "( " << rlt._rel[0];
+	for (int i = 1; i < strlen(rlt._rel); i++) {
+		os << " , " << rlt._rel[i];
+	}
+	os << " )";
+	return os; 
+
+}
+
+istream & operator>>(istream & is, RELATION & rlt)
+{
+	cout << "Enter the relation : ";
+	is >> rlt._rel;
+	return is; 
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+FDEP::FDEP(): _l("A"),_r("B")
+{}
+
+
+void FDEP::setLeft(char * l)
+{
+	strcpy_s(_l,l); 
+}
+
+void FDEP::setRight(char * r) {
+	strcpy_s(_r,r); 
+}
+
+char * FDEP::getLeft()
+{
+	return _l;
+}
+
+char * FDEP::getRight()
+{
+	return _r;
+}
+
+bool  FDEP::operator==(FDEP & fdep)
+{
+	if (strcmp(this->_l, fdep._l) == 0 && strcmp(this->_r, fdep._r) == 0)
+		return true;
+	return false; 
+}
+
+FDEP & FDEP::operator=(FDEP & source)
+{
+	if (this != &source) {
+		strcpy(this->_l, source._l);
+		strcpy(this->_r, source._r);
+	}
+	return *this;
+}
+
+istream & operator>>(istream & is, FDEP & fdep)
+{
+	cout << "Enter the left side : ";
+	is >> fdep._l;
+	cout << "Enter the right side : ";
+	is >> fdep._r;
+	return is;
+}
+
+ostream & operator<<(ostream & os, FDEP & fdep)
+{
+	os << fdep._l << " -> " << fdep._r << endl;
+	return os;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 KEY::KEY(RELATION rlt, FDEP *fdep,int nbFDEP) :_rlt(rlt), _fdep(fdep),_nbFDEP(nbFDEP)
 {}
@@ -150,53 +144,6 @@ char * KEY::GetKey()
 	return tab;
 }
 
-
-ostream & operator<<(ostream & os, KEY & key)
-{
-	os << "The key is : [ " << key.AddRest() << " ]" << endl; 
-	return os;
-	// TODO: insert return statement here
-}
-
-char *triBulle(char *T, int nbr) {
-	int i = 0, j, etat = 0;
-	char tmp;
-	do {
-		i++;
-		etat = 0;
-		for (j = 0; j<nbr - i; j++) {
-			if (T[j]<T[j + 1]) {
-				tmp = T[j];
-				T[j] = T[j + 1];
-				T[j + 1] = tmp;
-				etat = 1;
-			}
-		}
-	} while (etat);
-	return T;
-}
-char * RemoveStars(char *tab, int nb) {
-	tab = triBulle(tab, nb);
-	int i = 1;
-	while (tab[nb - i] == '*' && (nb - i) != 0) {
-		tab[nb - i] = '\0';
-		i++;
-	}
-	i = 0;
-	int tmp;
-	for (i = 0; i < nb - 1; i++) {
-		if (tab[i] == tab[i + 1]) {
-			tmp = tab[i];
-			tab[i] = tab[nb - 1];
-			tab[nb - 1] = '\0';
-			nb--;
-		}
-
-	}
-	return tab;
-}
-
-
 char* KEY::AddRest() {
 	char*key = GetKey();
 	char *tab = _rlt._rel;
@@ -224,6 +171,14 @@ char* KEY::AddRest() {
 	return key;
 }
 
+ostream & operator<<(ostream & os, KEY & key)
+{
+	os << "The key is : [ " << key.AddRest() << " ]" << endl; 
+	return os;
+	// TODO: insert return statement here
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 BCODD::BCODD(RELATION rlt, FDEP * fdep, int nbFDEP, KEY key): _rlt(rlt),_fdep(fdep),_nbFDEP(nbFDEP),_key(key)
 {
 };
@@ -315,6 +270,45 @@ FDEP * BCODD::CreateFDEP(FDEP cour, FDEP * fdep, int & nbFDEP)
 		}
 	}
 	nbFDEP--;
+	return tab;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+char *triBulle(char *T, int nbr) {
+	int i = 0, j, etat = 0;
+	char tmp;
+	do {
+		i++;
+		etat = 0;
+		for (j = 0; j<nbr - i; j++) {
+			if (T[j]<T[j + 1]) {
+				tmp = T[j];
+				T[j] = T[j + 1];
+				T[j + 1] = tmp;
+				etat = 1;
+			}
+		}
+	} while (etat);
+	return T;
+}
+char * RemoveStars(char *tab, int nb) {
+	tab = triBulle(tab, nb);
+	int i = 1;
+	while (tab[nb - i] == '*' && (nb - i) != 0) {
+		tab[nb - i] = '\0';
+		i++;
+	}
+	i = 0;
+	int tmp;
+	for (i = 0; i < nb - 1; i++) {
+		if (tab[i] == tab[i + 1]) {
+			tmp = tab[i];
+			tab[i] = tab[nb - 1];
+			tab[nb - 1] = '\0';
+			nb--;
+		}
+
+	}
 	return tab;
 }
 
