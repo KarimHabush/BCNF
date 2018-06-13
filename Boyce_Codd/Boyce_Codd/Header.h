@@ -1,5 +1,4 @@
 #pragma once
-#pragma warning(disable : 4996)
 #include <iostream>
 #include <cstring>
 #include <string>
@@ -70,21 +69,24 @@ class BCODD {
 	RELATION _rlt; 
 	FDEP *_fdep; 
 	int _nbFDEP;
-	KEY _key;
-	//hadi hya la class dyal boyce codd khdem 3liha XD 
+	KEY _key; 
 public :
 	//Constructor
 
 	BCODD(RELATION rlt, FDEP * fdep, int nbFDEP, KEY key);
-
+	//Main function (shows up in main)
 	void BoyceCodd(RELATION *rlt, int nb, RELATION tmp, FDEP *fdep, int &nbFDEP, KEY key);
-	
-	bool TestBC(RELATION rlt, FDEP *fdep, int nbFDEP);
-	FDEP * CreateFDEP(FDEP cour, FDEP *fdep, int &nbFDEP);
-	RELATION Rest(RELATION rlt, FDEP *fdep, int index);
+	//Used in the main function (they do all the hard work)
 private:
+	//Tests if the relation is on BCNF, returns false if not!
+	bool TestBC(RELATION rlt, FDEP *fdep, int nbFDEP);
+	//Creates new Dependencies while still decomposing
+	FDEP * CreateFDEP(FDEP cour, FDEP *fdep, int &nbFDEP);
+	//Adds the last decomposed relation to the relation array
+	RELATION Rest(RELATION rlt, FDEP *fdep, int index);
+	//Creates new decomposed relation every time the main used relation is in violation of BCNF
 	RELATION CreateRelation(FDEP fdep);
 };
-
+//sorts an array of characters
 char *triBulle(char *T, int nbr);
 char * RemoveStars(char *tab, int nb);
